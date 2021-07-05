@@ -22,7 +22,9 @@ function tag($tag, $txt) {
 }
 
 class HelloController extends Controller{
-    public function index(Request $request, Response $response) {
+    public function index() {
+        $data = ['msg' => 'これはBladeを利用しています。'];
+        return view('hello.index',$data);
         // global $head, $style, $body, $end;
         
         // $html = $head . tag('title','Hello/Index').$style . tag('h1', 'Index') . tag('p', 'this is Index page')
@@ -31,27 +33,27 @@ class HelloController extends Controller{
         // return $html;
 
         // レスポンス学習
-        $html = <<<EOF
-        <html>
-        <head>
-        <title>Hello/Index</title>
-        <style>
-        body {font-size: 16px; color:#999;}
-        h1 {font-size: 120pt; text-align: right; color:#fafafa; margin: -50px 0 -120px 0;}
-        </style>
-        </head>
-        <body>
-        <h1>hello</h1>
-        <h3>Request</h3>
-        <pre>{$request}</pre>
-        <h3>Response</h3>
-        <pre>{$response}</pre>
-        </body>
-        </html>
-        EOF;
+    //     $html = <<<EOF
+    //     <html>
+    //     <head>
+    //     <title>Hello/Index</title>
+    //     <style>
+    //     body {font-size: 16px; color:#999;}
+    //     h1 {font-size: 120pt; text-align: right; color:#fafafa; margin: -50px 0 -120px 0;}
+    //     </style>
+    //     </head>
+    //     <body>
+    //     <h1>hello</h1>
+    //     <h3>Request</h3>
+    //     <pre>{$request}</pre>
+    //     <h3>Response</h3>
+    //     <pre>{$response}</pre>
+    //     </body>
+    //     </html>
+    //     EOF;
 
-        $response->setContent($html);
-        return $response;
+    //     $response->setContent($html);
+    //     return $response;
     }
 
     // public function other() {
