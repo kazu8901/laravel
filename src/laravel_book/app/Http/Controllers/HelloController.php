@@ -22,9 +22,15 @@ function tag($tag, $txt) {
 }
 
 class HelloController extends Controller{
+
+    public function top() {
+        return view('hello.top');
+    }
+
     public function index() {
-        $data = ['msg' => 'これはBladeを利用しています。'];
-        return view('hello.index',$data);
+        // $data = ['msg' => '名前を入力してください。'];
+        $data=['1', 'two', 'three', '4', 'five'];
+        return view('hello.index', ['data' => $data]);
         // global $head, $style, $body, $end;
         
         // $html = $head . tag('title','Hello/Index').$style . tag('h1', 'Index') . tag('p', 'this is Index page')
@@ -54,6 +60,13 @@ class HelloController extends Controller{
 
     //     $response->setContent($html);
     //     return $response;
+    }
+
+    public function post(Request $request) {
+        $msg = $request->msg;
+        $data = ['msg'=> $msg];
+        $each=['1', 'two', 'three', '4', 'five'];
+        return view('hello.index', ['each' => $each, 'msg' => $msg]);
     }
 
     // public function other() {
