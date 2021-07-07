@@ -29,8 +29,15 @@ class HelloController extends Controller{
 
     public function index() {
         // $data = ['msg' => '名前を入力してください。'];
-        $data=['1', 'two', 'three', '4', 'five'];
-        return view('hello.index', ['data' => $data]);
+        // $data=['1', 'two', 'three', '4', 'five'];
+        $data = [
+            ['name' => 'tarou', 'mail' => 'taro'],
+            ['name' => 'yamada', 'mail' => 'yama'],
+            ['name' => 'suzuki', 'mail' => 'sususu']
+        ];
+
+        return view('hello.index', ['data' => $data], ['message'=>'Hello']);
+        
         // global $head, $style, $body, $end;
         
         // $html = $head . tag('title','Hello/Index').$style . tag('h1', 'Index') . tag('p', 'this is Index page')

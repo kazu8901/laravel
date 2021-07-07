@@ -1,99 +1,35 @@
-<html>
-  <head>
-    <title>Hello/Index</title>
-      <style>
-      body {font-size: 16px; color:#999;}
-      h1 {font-size: 120pt; text-align: right; color:#f6f6f6; margin: -20px 0 -30px 0;}
-    </style>
-  </head>
-  <body>
-    <h1>Blade/Index</h1>
-    @isset ($msg)
-      <p>こんにちは、{{$msg}}殿！</p>
-    @else
-      <p>おい、デュエルしろよ</p>
-    @endisset
-    <form method="POST" action="/hello">
-      {{ csrf_field() }}
-      <input type="text" name="msg">
-      <input type="submit">
-    </form>
+@extends('layouts.helloapp')
+@section('title', 'Index')
 
-    <p>&#064;foreachディレクティブの例</p>
-    @isset ($data)
-    <ol>
-      @foreach($data as $item)
-      <li>{{$item}}</li>
-      @endforeach
-    </ol>
-    @else
-      <ol>
-        @foreach($each as $item)
-        <li>{{$item}}</li>
-        @endforeach
-      </ol>
-    @endisset
+@section('menubar')
+  @parent
+  インデックスページ
+@endsection
 
-    <p>&#064;forディレクティブの例</p>
-    <ol>
-    @for ($i = 1;$i < 100;$i++)
-    @if ($i % 2 == 1)
-      @continue
-    @elseif ($i <= 10)
-      <li>No, {{$i}}
-    @else
-      @break
-    @endif
-    @endfor
-    </ol>
+@section('content')
+  <p>ここが本文のコンテンツです。</p>
+  <p>Controller value <br>'message' = {{$message}}</p>
+  <p>ViewComposer Value<br>'view_message' = {{$view_message}}</p>
+  <p>test<br>'test_messa' = {{$test_message}}</p>
+  <p>mycomposer<br> '自作コンポーザー' {{$testtest}}</p>
+  
+  @each ('components.item', $data, 'item')
 
-    @isset ($data)
-      @foreach($data as $item)
-      @if ($loop->first)
-        <p>※データ一覧</p><ul>
-      @endif
-      <li>No,{{$loop->iteration}}.{{$item}}</li>
-      @if ($loop->last)
-      </ul><p>ここまで</p>
-      @endif
-      @endforeach
-    @else
-      @foreach($each as $item)
-        @if ($loop->first)
-          <p>※データ一覧</p><ul>
-        @endif
-        <li>No,{{$loop->iteration}}.{{$item}}</li>
-        @if ($loop->last)
-        </ul><p>ここまで</p>
-        @endif
-      @endforeach
-    @endisset
+  @component('components.message')
+    @slot('msg_title')
+      おい、
+    @endslot
 
-    <p>&#064;whileディレクティブの例</p>
-    @isset ($data)
-      <ol>
-      @php
-      $counter = 0;
-      @endphp
-      @while ($counter < count($data))
-      <li>{{$data[$counter]}}</li>
-      @php
-      $counter++
-      @endphp
-      @endwhile
-      </ol>
-    @else
-    <ol>
-      @php
-      $counter = 0;
-      @endphp
-      @while ($counter < count($each))
-      <li>{{$each[$counter]}}</li>
-      @php
-      $counter++
-      @endphp
-      @endwhile
-      </ol>
-    @endisset
-  </body>
-</html>
+    @slot('msg_content')
+      デュエルしろよ
+    @endslot
+  @endcomponent
+
+  @include('components.message', ['msg_title'=>'OK','msg_content'=>'サブビューです'])
+
+@endsection
+
+
+@section('footer')
+copyright 2017 tuyano.
+@endsection
