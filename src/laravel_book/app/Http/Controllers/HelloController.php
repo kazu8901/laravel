@@ -27,17 +27,17 @@ class HelloController extends Controller{
         return view('hello.top');
     }
 
-    public function index() {
+    public function index(Request $request) {
         // $data = ['msg' => '名前を入力してください。'];
         // $data=['1', 'two', 'three', '4', 'five'];
-        $data = [
-            ['name' => 'tarou', 'mail' => 'taro'],
-            ['name' => 'yamada', 'mail' => 'yama'],
-            ['name' => 'suzuki', 'mail' => 'sususu']
-        ];
+        // $data = [
+        //     ['name' => 'tarou', 'mail' => 'taro'],
+        //     ['name' => 'yamada', 'mail' => 'yama'],
+        //     ['name' => 'suzuki', 'mail' => 'sususu']
+        // ];
 
-        return view('hello.index', ['data' => $data], ['message'=>'Hello']);
-        
+        return view('hello.index');
+
         // global $head, $style, $body, $end;
         
         // $html = $head . tag('title','Hello/Index').$style . tag('h1', 'Index') . tag('p', 'this is Index page')
