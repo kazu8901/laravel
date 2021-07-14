@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\HelloRequest;
+use Validator;
 
 global $head, $style, $body, $end;
 $head = '<html><head>';
@@ -27,17 +29,33 @@ class HelloController extends Controller{
         return view('hello.top');
     }
 
-    public function index() {
-        // $data = ['msg' => '名前を入力してください。'];
-        // $data=['1', 'two', 'three', '4', 'five'];
-        $data = [
-            ['name' => 'tarou', 'mail' => 'taro'],
-            ['name' => 'yamada', 'mail' => 'yama'],
-            ['name' => 'suzuki', 'mail' => 'sususu']
-        ];
+    public function index(Request $request) {
+        if ($request->hascookie('msg'))
+         $msg = "Cookie: ". $request->cookie('msg');
+        else {
+            $msg = "クッキーはありません";
+        }
+        // $validator = Validator::make($request->query(),[
+        //     'id' => 'required',
+        //     'pass' => 'required',
+        // ]);
 
-        return view('hello.index', ['data' => $data], ['message'=>'Hello']);
-        
+        // if ($validator->fails()) {
+        //     $msg = 'クエリに問題があります';
+        // }
+        // else {
+        //     $msg = 'いいですねぇ！';
+        // }
+        // $data = ['msg' => '名前を入力してください。', 'test' => 'フォームですぞ'];
+        // $data=['1', 'two', 'three', '4', 'five'];
+        // $data = [
+        //     ['name' => 'tarou', 'mail' => 'taro'],
+        //     ['name' => 'yamada', 'mail' => 'yama'],
+        //     ['name' => 'suzuki', 'mail' => 'sususu']
+        // ];
+
+        return view('hello.index', ['msg' => $msg]);
+
         // global $head, $style, $body, $end;
         
         // $html = $head . tag('title','Hello/Index').$style . tag('h1', 'Index') . tag('p', 'this is Index page')
@@ -69,11 +87,51 @@ class HelloController extends Controller{
     //     return $response;
     }
 
-    public function post(Request $request) {
+    public function post(request $request) {
+
+        $validate_rule = [
+            'msg' => 'required',
+        ];
+
+        $this->validate($request, $validate_rule);
         $msg = $request->msg;
-        $data = ['msg'=> $msg];
-        $each=['1', 'two', 'three', '4', 'five'];
-        return view('hello.index', ['each' => $each, 'msg' => $msg]);
+        $response = new Response(view('hello.index',['msg' => '「'.$msg.'」'.'をクッキーに保存しました']));
+        $response->cookie('msg', $msg,100);
+        return $response;
+        // $rules = [
+        //     'name' => 'required',
+        //     'mail' => 'email',
+        //     'age' => 'numeric',
+        // ];
+
+        // $messages = [
+        //     'name.required' => '名前は必ず入力してください',
+        //     'mail.email' => 'メールアドレスが必要です',
+        //     'age.numeric' => '整数で入力してください',
+        //     'age.min' => '0際以上の年齢で入力してください',
+        //     'age.max' => '150歳以下の年齢で入力してください'
+        // ];
+
+        // $validator = Validator::make($request->all(),$rules,$messages);
+
+        // $validator->sometimes('age','min:0', function($input) {
+        //     return !is_int($input->age);
+        // });
+
+        // $validator->sometimes('age', 'max:150', function($input) {
+        //     return !is_int($input->age);
+        // });
+
+        // if ($validator->fails()) {
+        //     return redirect('/hello')
+        //     ->withErrors($validator)
+        //     ->withInput();
+        // }
+        return view('hello.index', ['msg' => $msg]);
+        // $msg = $request->msg;
+        // $data = ['msg'=> $msg];
+        // $each=['1', 'two', 'three', '4', 'five'];
+        // return view('hello.index', ['each' => $each, 'msg' => $msg]);
     }
 
     // public function other() {

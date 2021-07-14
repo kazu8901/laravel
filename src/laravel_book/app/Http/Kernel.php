@@ -13,6 +13,7 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    // グローバルミドルウェア
     protected $middleware = [
         \App\Http\Middleware\TrustProxies::class,
         \App\Http\Middleware\CheckForMaintenanceMode::class,
@@ -26,6 +27,7 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    // ミドルウェアのグループ登録
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
@@ -40,6 +42,9 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+        'hello' => [
+            \App\Http\Middleware\HelloMiddleware::class,
         ],
     ];
 
