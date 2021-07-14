@@ -30,7 +30,11 @@ class HelloController extends Controller{
     }
 
     public function index(Request $request) {
-        $msg = "フォームを入力してください";
+        if ($request->hascookie('msg'))
+         $msg = "Cookie: ". $request->cookie('msg');
+        else {
+            $msg = "クッキーはありません";
+        }
         // $validator = Validator::make($request->query(),[
         //     'id' => 'required',
         //     'pass' => 'required',
@@ -83,7 +87,17 @@ class HelloController extends Controller{
     //     return $response;
     }
 
-    public function post(HelloRequest $request) {
+    public function post(request $request) {
+
+        $validate_rule = [
+            'msg' => 'required',
+        ];
+
+        $this->validate($request, $validate_rule);
+        $msg = $request->msg;
+        $response = new Response(view('hello.index',['msg' => '「'.$msg.'」'.'をクッキーに保存しました']));
+        $response->cookie('msg', $msg,100);
+        return $response;
         // $rules = [
         //     'name' => 'required',
         //     'mail' => 'email',
@@ -113,7 +127,7 @@ class HelloController extends Controller{
         //     ->withErrors($validator)
         //     ->withInput();
         // }
-        return view('hello.index', ['msg' => '正しく入力できましたぞ']);
+        return view('hello.index', ['msg' => $msg]);
         // $msg = $request->msg;
         // $data = ['msg'=> $msg];
         // $each=['1', 'two', 'three', '4', 'five'];
