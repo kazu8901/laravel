@@ -23,8 +23,6 @@ use App\Http\Middleware\HelloMiddleware;
 // Route::get('hello/other', 'HelloController@other');
 
 Route::get('/', 'HelloController@top');
-Route::get('hello', 'HelloController@index')
-->middleware('hello');
+Route::get('hello', 'HelloController@index');
 
-Route::post('hello', 'HelloController@post')
-->middleware('hello');
+Route::post('hello', 'HelloController@post');
