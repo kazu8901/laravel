@@ -1,0 +1,8 @@
+peopleテーブル
+CREATE TABLE `people` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`name` text NOT NULL ,
+	`mail` text ,
+	`age` int(11),
+	PRIMARY KEY (`id`)
+);
