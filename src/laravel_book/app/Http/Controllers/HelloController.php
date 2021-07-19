@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\HelloRequest;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 global $head, $style, $body, $end;
@@ -30,11 +31,22 @@ class HelloController extends Controller{
     }
 
     public function index(Request $request) {
-        if ($request->hascookie('msg'))
-         $msg = "Cookie: ". $request->cookie('msg');
-        else {
-            $msg = "クッキーはありません";
-        }
+
+        $items = DB::table('people')->orderBy('age', 'asc')->get();
+
+        // if (isset($request->id)) {
+        //     $param = ['id' => $request->id];
+        //     $items = DB::select('select * from people where id = :id', $param);
+        // }
+        // else {
+        //     $items = DB::select('select * from people');
+        // }
+        $msg = "postではない";
+        // if ($request->hascookie('msg'))
+        //  $msg = "Cookie: ". $request->cookie('msg');
+        // else {
+        //     $msg = "クッキーはありません";
+        // }
         // $validator = Validator::make($request->query(),[
         //     'id' => 'required',
         //     'pass' => 'required',
@@ -54,7 +66,7 @@ class HelloController extends Controller{
         //     ['name' => 'suzuki', 'mail' => 'sususu']
         // ];
 
-        return view('hello.index', ['msg' => $msg]);
+        return view('hello.index', ['msg'=> $msg, 'items' => $items]);
 
         // global $head, $style, $body, $end;
         
@@ -94,8 +106,9 @@ class HelloController extends Controller{
         ];
 
         $this->validate($request, $validate_rule);
+        $items = DB::select('select * from people');
         $msg = $request->msg;
-        $response = new Response(view('hello.index',['msg' => '「'.$msg.'」'.'をクッキーに保存しました']));
+        $response = new Response(view('hello.index',['msg' => '「'.$msg.'」'.'をクッキーに保存しました', 'items' => $items]));
         $response->cookie('msg', $msg,100);
         return $response;
         // $rules = [
@@ -127,11 +140,88 @@ class HelloController extends Controller{
         //     ->withErrors($validator)
         //     ->withInput();
         // }
-        return view('hello.index', ['msg' => $msg]);
+        return view('hello.index', ['msg' => $msg, 'items' => $items]);
         // $msg = $request->msg;
         // $data = ['msg'=> $msg];
         // $each=['1', 'two', 'three', '4', 'five'];
         // return view('hello.index', ['each' => $each, 'msg' => $msg]);
+    }
+
+    public function add(Request $request) {
+        return view('hello.add');
+    }
+
+    public function create(Request $request) {
+        $param = [
+            'name' => $request->name,
+            'mail' => $request->mail,
+            'age' => $request->age,
+        ];
+        // DB::insert('insert into people (name,mail,age) values (:name, :mail, :age)', $param);
+        DB::table('people')->insert($param);
+        return redirect('/hello');
+    }
+
+    public function edit(Request $request) {
+        $param = ['id' => $request->id];
+        // $item = DB::select('select * from people where id = :id', $param);
+        $item = DB::table('people')
+        ->where('id', $request->id)->first();
+        return view('hello.edit', ['form' => $item]);
+    }
+
+    public function update(Request $request) {
+        $param = [
+            'id' => $request->id,
+            'name' => $request->name,
+            'mail' => $request->mail,
+            'age' => $request->age,
+        ];
+
+        // DB::update('update people set name = :name, mail = :mail, age = :age
+        //             where id = :id', $param);
+        DB::table('people')
+        ->where('id', $request->id)
+        ->update($param);
+        return redirect('/hello');
+    }
+
+    public function del(Request $request) {
+        $param = ['id' => $request->id];
+        // $item = DB::select('select * from people where id = :id', $param);
+        $item = DB::table('people')
+        ->where('id', $request->id)->first();
+        return view('hello.del', ['form' => $item]);
+    }
+
+    public function remove(Request $request) {
+        $param = ['id' => $request->id];
+        // DB::delete('delete from people where id = :id', $param);
+        DB::table('people')
+        ->where('id', $request->id)
+        ->delete();
+        return redirect('/hello');
+    }
+
+    public function show(Request $request) {
+        // $min = $request->min;
+        // $max = $request->max;
+        // $items = DB::table('people')
+        // ->whereRaw('age >= ? and age <= ?',
+        // [$min,$max])->get();
+
+        // $name = $request->name;
+        // $items = DB::table('people')
+        // ->where('name', 'like', '%' . $name . '%')
+        // ->orwhere('mail', 'like', '%'.$name.'mail')
+        // ->get();
+
+        $page = $request->page;
+        $items = DB::table('people')
+        ->offset($page * 3)
+        ->limit(3)
+        ->get();
+        return view('hello.show', ['items' => $items]);
     }
 
     // public function other() {

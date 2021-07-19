@@ -23,6 +23,17 @@ use App\Http\Middleware\HelloMiddleware;
 // Route::get('hello/other', 'HelloController@other');
 
 Route::get('/', 'HelloController@top');
-Route::get('hello', 'HelloController@index');
 
-Route::post('hello', 'HelloController@post');
+Route::get('hello', 'HelloController@index');
+Route::post('hello', 'HelloController@remove');
+
+Route::get('hello/add', 'HelloController@add');
+Route::post('hello/add', 'HelloController@create');
+
+Route::get('hello/edit', 'HelloController@edit');
+Route::post('hello/edit', 'HelloController@update');
+
+Route::get('hello/del', 'HelloController@del');
+Route::post('hello/del', 'HelloController@remove');
+
+Route::get('hello/show', 'HelloController@show');
