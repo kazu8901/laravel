@@ -31,5 +31,13 @@ class Person extends Model
     
         static::addGlobalScope(new ScopePerson);
     }
+
+    protected $guarded = array('id');
+
+    public static $rules = array(
+        'name' => 'required',
+        'mail' => 'email',
+        'age' => 'integer|min:0|max:150'
+    );
     
 }
