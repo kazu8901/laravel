@@ -28,10 +28,27 @@
 
   <a href="/person/add">追加ページ</a>
 
+
   <table>
-  <tr><th>Data</th></tr>
+  <tr><th>Person</th><th>Board</th></tr>
   @foreach ($items as $item)
-    <tr><td>{{$item->getData()}}</td></tr>
+    <tr>
+      <td>{{$item->getData()}}</td>
+      <td> 
+          @if ($item->board != null)
+            {{$item->board->getData()}}
+          @endif
+      </td>
+      <td>
+        @if ($item->boards != null)
+          <table>
+            @foreach ($item->boards as $obj)
+              <tr><td>{{$obj->getData()}}</tr></td>
+            @endforeach
+          </table>
+        @endif
+      </td>
+    </tr>
   @endforeach
   </table>
 @endsection
