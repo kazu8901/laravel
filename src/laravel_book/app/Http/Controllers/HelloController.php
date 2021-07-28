@@ -224,6 +224,10 @@ class HelloController extends Controller{
         return view('hello.show', ['items' => $items]);
     }
 
+    public function rest(Request $request) {
+        return view('hello/rest');
+    }
+
     // public function other() {
     //     global $head, $style, $body, $end;
         
