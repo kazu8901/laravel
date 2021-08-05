@@ -7,6 +7,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\HelloRequest;
 use Illuminate\Support\Facades\DB;
+use App\Person;
+use Carbon\Carbon;
 use Validator;
 
 global $head, $style, $body, $end;
@@ -32,7 +34,17 @@ class HelloController extends Controller{
 
     public function index(Request $request) {
 
-        $items = DB::table('people')->orderBy('age', 'asc')->get();
+        $sort = $request->sort;
+       
+        // $items = DB::table('people')->simplePaginate(5)->orderBy($sort, 'asc');
+        if ($sort == "") {
+        $items = Person::orderBy('id', 'asc')
+        ->Paginate(5);
+        }
+        else {
+            $items = Person::orderBy($sort, 'asc')
+        ->Paginate(5);
+        }
 
         // if (isset($request->id)) {
         //     $param = ['id' => $request->id];
@@ -66,7 +78,7 @@ class HelloController extends Controller{
         //     ['name' => 'suzuki', 'mail' => 'sususu']
         // ];
 
-        return view('hello.index', ['msg'=> $msg, 'items' => $items]);
+        return view('hello.index', ['msg'=> $msg, 'items' => $items, 'sort' => $sort]);
 
         // global $head, $style, $body, $end;
         
@@ -156,6 +168,8 @@ class HelloController extends Controller{
             'name' => $request->name,
             'mail' => $request->mail,
             'age' => $request->age,
+            'updated_at'=>Carbon::now(),
+            'created_at'=>Carbon::now()
         ];
         // DB::insert('insert into people (name,mail,age) values (:name, :mail, :age)', $param);
         DB::table('people')->insert($param);

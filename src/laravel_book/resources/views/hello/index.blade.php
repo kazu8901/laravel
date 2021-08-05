@@ -1,4 +1,12 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/app.css">
+</head>
 @extends('layouts.helloapp')
+
+<style>
+ .pagination {font-size:10px;}
+ .pagination li {display:inline-block;}
+</style>
 @section('title', 'Index')
 
 @section('menubar')
@@ -13,7 +21,8 @@
   @endif
  
   <table>
-  <tr><th>Name</th><th>Mail</th><th>Age</th><th>edit</th><th>del</th><th>show</th><th>削除</th></tr>
+  <!-- <tr><th>Name</th><th>Mail</th><th>Age</th><th>edit</th><th>del</th><th>show</th><th>削除</th></tr> -->
+  <tr><th><a href="/hello?sort=name">name</a></th><th><a href="/hello?sort=mail">mail</a></th><th><a href="/hello?sort=age">Age</a></th><th>edit</th><th>del</th><th>show</th><th>削除</th></tr>
   @foreach ($items as $item)
   <tr>
   <td>{{$item->name}}</td>
@@ -29,7 +38,9 @@
   </form></td>
   </tr>
   @endforeach
-  </table> <br>
+  </table>
+  {{ $items->appends(['sort' => $sort])->links()}}
+   <br>
   <a href="/hello/add">新規投稿ページへ</a>
   <!-- <table>
   <form action="/hello" method="post">
